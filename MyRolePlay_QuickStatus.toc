@@ -1,0 +1,9 @@
+## Interface: 50400
+## Title: MyRolePlay_QuickStatus
+## Version: 0.1
+## Author: Haleth/Lightsword
+## Notes: Display and editor for the MyRolePlay 'Currently' field.
+## RequiredDeps: MyRolePlay
+
+core.lua
+view.lua
