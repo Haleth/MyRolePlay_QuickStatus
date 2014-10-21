@@ -2,12 +2,58 @@ local _, ns = ...
 
 -- [[ Create frames ]]
 
-local f = CreateFrame("EditBox", nil, UIParent)
+local isMovable = false
+
+local f = CreateFrame("EditBox", "MyRolePlay_QuickStatus", UIParent)
 f:SetSize(200, 30)
 f:SetPoint("TOP", UIParent, -10, -50)
 f:SetAutoFocus(false)
 f:SetFontObject(GameFontHighlight)
 f:SetTextInsets(8, 8, 0, 0)
+f:SetMovable(true)
+
+local moveFrame = CreateFrame("Frame", nil, f)
+moveFrame:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 1)
+moveFrame:SetPoint("BOTTOMRIGHT", f, "TOPRIGHT", 20, 1)
+moveFrame:SetHeight(14)
+moveFrame:SetAlpha(0)
+moveFrame:EnableMouse(true)
+moveFrame:RegisterForDrag("LeftButton")
+
+local moveText = moveFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+moveText:SetPoint("CENTER")
+moveText:SetText("Click to unlock.")
+
+moveFrame:SetScript("OnEnter", function(self)
+	self:SetAlpha(1)
+end)
+
+moveFrame:SetScript("OnLeave", function(self)
+	self:SetAlpha(0)
+end)
+
+moveFrame:HookScript("OnMouseUp", function(self, button)
+	if isMovable then
+		if IsShiftKeyDown() then
+			f:ClearAllPoints()
+			f:SetPoint("TOP", UIParent, -10, -50)
+		end
+
+		isMovable = false
+		moveFrame:SetScript("OnDragStart", nil)
+		moveFrame:SetScript("OnDragStop", nil)
+		moveText:SetText("Click to unlock.")
+	else
+		isMovable = true
+		moveFrame:SetScript("OnDragStart", function()
+			f:StartMoving()
+		end)
+		moveFrame:SetScript("OnDragStop", function()
+			f:StopMovingOrSizing()
+		end)
+		moveText:SetText("Click to lock. Shift-click to reset.")
+	end
+end)
 
 f.left = f:CreateTexture(nil, "BACKGROUND")
 f.left:SetTexture("Interface\\Common\\Common-Input-Border")
