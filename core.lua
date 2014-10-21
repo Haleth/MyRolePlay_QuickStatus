@@ -52,9 +52,17 @@ ns.onClearButtonClicked = function(self)
 	mrp:SaveField("CU", "")
 end
 
--- [[ Show/hide clear button ]]
+-- [[ Other methods ]]
+
+-- Show/hide clear button
 
 updateClearButton = function(self)
 	self.clearButton:SetShown(self:GetText() ~= dummyText)
 end
 ns.updateClearButton = updateClearButton
+
+-- To determine window opacity
+
+ns.hasText = function(self)
+	return self:GetText() ~= dummyText
+end

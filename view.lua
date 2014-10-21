@@ -1,8 +1,8 @@
 local _, ns = ...
 
--- [[ Create frames ]]
+local INACTIVE_ALPHA = .4
 
-local isMovable = false
+-- [[ Create frames ]]
 
 local f = CreateFrame("EditBox", "MyRolePlay_QuickStatus", UIParent)
 f:SetSize(200, 30)
@@ -11,6 +11,12 @@ f:SetAutoFocus(false)
 f:SetFontObject(GameFontHighlight)
 f:SetTextInsets(8, 8, 0, 0)
 f:SetMovable(true)
+
+local clearButton = CreateFrame("Button", nil, f)
+clearButton:SetSize(17, 17)
+clearButton:SetPoint("LEFT", f, "RIGHT")
+clearButton.parent = f
+f.clearButton = clearButton
 
 local moveFrame = CreateFrame("Frame", nil, f)
 moveFrame:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 1)
@@ -23,6 +29,10 @@ moveFrame:RegisterForDrag("LeftButton")
 local moveText = moveFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 moveText:SetPoint("CENTER")
 moveText:SetText("Click to unlock.")
+
+-- [[ Frame moving ]]
+
+local isMovable = false
 
 moveFrame:SetScript("OnEnter", function(self)
 	self:SetAlpha(1)
@@ -55,6 +65,8 @@ moveFrame:HookScript("OnMouseUp", function(self, button)
 	end
 end)
 
+-- [[ Textures ]]
+
 f.left = f:CreateTexture(nil, "BACKGROUND")
 f.left:SetTexture("Interface\\Common\\Common-Input-Border")
 f.left:SetSize(8, 21)
@@ -74,12 +86,6 @@ f.middle:SetPoint("LEFT", f.left, "RIGHT")
 f.middle:SetPoint("RIGHT", f.right, "LEFT")
 f.middle:SetTexCoord(0.0625, 0.9375, 0, 0.625)
 
-local clearButton = CreateFrame("Button", nil, f)
-clearButton:SetSize(17, 17)
-clearButton:SetPoint("LEFT", f, "RIGHT")
-clearButton.parent = f
-f.clearButton = clearButton
-
 do
 	local tex = clearButton:CreateTexture(nil, "OVERLAY")
 	tex:SetAllPoints()
@@ -90,15 +96,27 @@ end
 
 -- [[ Handle input ]]
 
+local updateAlpha = function()
+	f:SetAlpha(ns.hasText(f) and 1 or INACTIVE_ALPHA)
+end
+
+local resetAlpha = function()
+	f:SetAlpha(1)
+end
+
 f:SetScript("OnEscapePressed", ns.onEscapePressed)
 f:SetScript("OnEnterPressed", ns.onEnterPressed)
 f:SetScript("OnEditFocusGained", ns.onEditFocusGained)
+f:SetScript("OnEnter", resetAlpha)
+f:SetScript("OnLeave", updateAlpha)
 clearButton:SetScript("OnClick", ns.onClearButtonClicked)
 clearButton:SetScript("OnEnter", function(self)
 	self.tex:SetAlpha(1)
+	resetAlpha()
 end)
 clearButton:SetScript("OnLeave", function(self)
 	self.tex:SetAlpha(.5)
+	updateAlpha()
 end)
 
 -- [[ Aurora / FreeUI compatibility ]]
@@ -136,4 +154,7 @@ do
 	end
 end
 
+-- Show/hide clear button
 ns.updateClearButton(f)
+-- Set window alpha
+updateAlpha()
