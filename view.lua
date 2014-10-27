@@ -147,7 +147,7 @@ end
 
 do
 	local currently = mrpSaved.Profiles[mrpSaved.SelectedProfile].CU
-	if currently ~= "" then
+	if currently and currently ~= "" then
 		f:SetText(currently)
 	else
 		ns.toggleDummyText(f, true)
