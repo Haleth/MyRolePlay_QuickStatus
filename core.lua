@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local updateClearButton
-local dummyText = "Click to set status..."
+local dummyText = "What is your character doing?"
 
 -- [[ Handle input ]]
 
