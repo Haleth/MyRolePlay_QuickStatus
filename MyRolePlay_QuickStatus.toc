@@ -1,6 +1,6 @@
 ## Interface: 60000
 ## Title: MyRolePlay_QuickStatus
-## Version: 0.1
+## Version: 1.0
 ## Author: Haleth/Lightsword
 ## Notes: Display and editor for the MyRolePlay 'Currently' field.
 ## RequiredDeps: MyRolePlay
