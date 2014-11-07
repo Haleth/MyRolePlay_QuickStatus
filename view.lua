@@ -5,7 +5,7 @@ local INACTIVE_ALPHA = .4
 -- [[ Create frames ]]
 
 local f = CreateFrame("EditBox", "MyRolePlay_QuickStatus", UIParent)
-f:SetSize(200, 30)
+f:SetSize(220, 30)
 f:SetPoint("TOP", UIParent, -10, -50)
 f:SetAutoFocus(false)
 f:SetFontObject(GameFontHighlight)
